@@ -62,7 +62,7 @@ public interface OwnerRepository extends Repository<Owner, Integer> {
 
     /**
      * findByFirstName
-     * @param firstName
+     * @param firstName  test
      * @return
      */
     @Query("SELECT DISTINCT owner FROM Owner owner left join fetch owner.pets WHERE owner.firstName like %:firstName%")
