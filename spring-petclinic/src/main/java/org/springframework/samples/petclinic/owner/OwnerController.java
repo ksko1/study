@@ -15,14 +15,12 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -40,10 +38,20 @@ class OwnerController {
 
     private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm";
     private final OwnerRepository owners;
+    private final ApplicationContext applicationContext;
 
-
-    public OwnerController(OwnerRepository clinicService) {
+    public OwnerController(OwnerRepository clinicService, ApplicationContext applicationContext) {
         this.owners = clinicService;
+        this.applicationContext = applicationContext;
+    }
+
+    @GetMapping("/bean")
+    @ResponseBody
+    public String bean() {
+        //applicationContext 에서 꺼낸 OwnerRepository 와 applicationContext가 알아서 주입해준 OwnerRepository 값을 비교하려고 함.
+        //이런 객체를 singletonscope 객체 라고 한다.
+        return "bean : " + applicationContext.getBean(OwnerRepository.class) + "\n"
+            + "owners : " + this.owners;
     }
 
     @InitBinder
